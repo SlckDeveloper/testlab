@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:testlab/widgets/dekorasyonlarim.dart';
@@ -10,6 +12,7 @@ class TrafoTanimlama extends StatefulWidget {
 }
 
 class _TrafoTanimlamaState extends State<TrafoTanimlama> {
+  Directory currents = Directory.current;
   String? baglantiGrubu;
   String? baglantiGrubuText = "BGrubu";
   String marka = "EREN";
@@ -48,7 +51,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                   )
                 ])),
                 Text(
-                  "${guc}kVA   $cevirmeOraniPrimer/$cevirmeOraniSekonder   $baglantiGrubuText",
+                  "$currents",
                   style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
