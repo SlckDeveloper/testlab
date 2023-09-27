@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testlab/fonksiyonlar/form_fonksiyonlarim.dart';
+import 'package:testlab/sayfalar/trafo_tanimlama.dart';
+import 'package:testlab/servisler/auth.dart';
 import 'package:testlab/widgets/dekorasyonlarim.dart';
 
 class LoginSayfasi extends StatefulWidget {
@@ -11,7 +13,7 @@ class LoginSayfasi extends StatefulWidget {
 
 class _LoginSayfasiState extends State<LoginSayfasi> {
   /*String? isim, email;*/
-  String _textIsim = "", _textEmail = "";
+  String _textSifre = "", _textEmail = "";
   final formKey = GlobalKey<FormState>();
   bool formOnayliMi = false;
 
@@ -19,7 +21,7 @@ class _LoginSayfasiState extends State<LoginSayfasi> {
   void dispose() {
     formOnayliMi;
     formKey;
-    _textIsim;
+    _textSifre;
     _textEmail;
     super.dispose();
   }
@@ -38,23 +40,11 @@ class _LoginSayfasiState extends State<LoginSayfasi> {
                 height: 100,
               ),
               TextFormField(
-                decoration: Dekorasyonlarim().textFormFieldIsimDecoration(),
-                validator: (value) {
-                  if (value != null && value.length < 3)
-                    return "İsim alanı en az 3 karakter olmalıdır";
-                  return null;
-                },
-                onSaved: (data) => _textIsim = data!,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextFormField(
                 decoration: Dekorasyonlarim().textFormFieldEmailDecoration(),
                 validator: (value) {
                   if ((value != null && !value.contains('@')) ||
                       (value != null && !value.contains('.com')))
-                    return "Geçerli bir eposta adresi giriniz";
+                    return "Geçerli bir eposta adresi giriniz!";
                   return null;
                 },
                 onSaved: (data) => _textEmail = data!,
@@ -63,12 +53,17 @@ class _LoginSayfasiState extends State<LoginSayfasi> {
                 height: 10,
               ),
               TextFormField(
-                obscureText: true,
                 decoration: Dekorasyonlarim().textFormFieldSifreDecoration(),
+                validator: (value) {
+                  if (value != null && value.length < 6) return "En az 6 haneli bir şifre giriniz!";
+                  return null;
+                },
+                onSaved: (data) => _textSifre = data!,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -87,16 +82,26 @@ class _LoginSayfasiState extends State<LoginSayfasi> {
     );
   }
 
-  void _saveFormData() {
+  Future<void> _saveFormData() async{
     if (formKey.currentState!.validate()) {
       formKey.currentState?.save();
       formOnayliMi = true;
+      String? giris = await Auth().signInWithEmailAndPAssword(_textEmail, _textSifre);
+      if(giris == "giriş"){
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const TrafoTanimlama(),
+          ),
+        );
+      }else{
+        print("wrrrrrrrrrrrrrrrrrrrrrrrrrrroooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooonnnnnnnnnnnnnnnnnnnnnngggg!!!!!!!!!!");
+      }
+
     } else {
       formOnayliMi = false;
     }
     setState(() {
       formOnayliMi;
-      _textIsim;
       _textEmail;
     });
   }

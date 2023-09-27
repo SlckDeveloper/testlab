@@ -12,14 +12,13 @@ class TrafoTanimlama extends StatefulWidget {
 }
 
 class _TrafoTanimlamaState extends State<TrafoTanimlama> {
-  Directory currents = Directory.current;
   String? baglantiGrubu;
   String? baglantiGrubuText = "BGrubu";
   String marka = "EREN";
   String seriNo = "SeriNo";
   String projeNo = "ProjeNo";
   String guc = "GüÇ";
-  String cevirmeOraniPrimer = "Pri";
+  String cevirmeOraniPrimer = "PRI";
   String cevirmeOraniSekonder = "sek";
 
   final GlobalKey<FormState> _globalFormKey = GlobalKey<FormState>();
@@ -51,12 +50,13 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                   )
                 ])),
                 Text(
-                  "$currents",
+                  "${guc}kVA  ${cevirmeOraniPrimer} / $cevirmeOraniSekonder  $baglantiGrubuText ",
                   style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.deepPurple),
-                )
+                ),
+
               ],
             ),
             const Expanded(child: SizedBox()),
