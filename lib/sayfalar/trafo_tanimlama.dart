@@ -417,7 +417,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
 void _testKategoriSayfasi(BuildContext context){
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => const TT
+      builder: (context) => const TTR(),
     ),
   );
 }
