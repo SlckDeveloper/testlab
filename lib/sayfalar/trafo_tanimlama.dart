@@ -1,8 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:testlab/sayfalar/testler/ttr.dart';
+import 'package:testlab/servisler/firestore_database.dart';
 import 'package:testlab/widgets/dekorasyonlarim.dart';
+import 'package:testlab/widgets/mesajlar.dart';
 
 class TrafoTanimlama extends StatefulWidget {
   const TrafoTanimlama({Key? key}) : super(key: key);
@@ -17,11 +18,13 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
   String marka = "EREN";
   String seriNo = "SeriNo";
   String projeNo = "ProjeNo";
-  String guc = "GüÇ";
-  String cevirmeOraniPrimer = "PRI";
-  String cevirmeOraniSekonder = "sek";
+  String guc = "Güç";
+  String primerV = "PRI";
+  String sekonderV = "sek";
 
   final GlobalKey<FormState> _globalFormKey = GlobalKey<FormState>();
+  bool bilgilerVeritanainaKaydediliyor = false;
+  bool veriKaydiBasariliMi = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,27 +39,17 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                 Text.rich(TextSpan(children: [
                   TextSpan(
                     text: "$marka    ",
-                    style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red),
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.red),
                   ),
                   TextSpan(
                     text: "$seriNo   $projeNo",
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.blue),
                   )
                 ])),
                 Text(
-                  "${guc}kVA  ${cevirmeOraniPrimer} / $cevirmeOraniSekonder  $baglantiGrubuText ",
-                  style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.deepPurple),
+                  "${guc}kVA  $primerV / $sekonderV  $baglantiGrubuText ",
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.deepPurple),
                 ),
-
               ],
             ),
             const Expanded(child: SizedBox()),
@@ -68,8 +61,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
       ),
       backgroundColor: Colors.teal,
       body: Padding(
-        padding:
-            const EdgeInsets.only(left: 18.0, right: 18.0, top: 10, bottom: 8),
+        padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 10, bottom: 8),
         child: SingleChildScrollView(
           child: Form(
             key: _globalFormKey,
@@ -83,8 +75,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                         flex: 1,
                         child: Text(
                           "Marka:",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         )),
                     Expanded(
                       flex: 2,
@@ -96,8 +87,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                         },
                         textCapitalization: TextCapitalization.characters,
                         initialValue: "EREN",
-                        decoration: Dekorasyonlarim()
-                            .textFormFieldTrafoBilgiDecoration(),
+                        decoration: Dekorasyonlarim().textFormFieldTrafoBilgiDecoration(),
                       ),
                     ),
                   ],
@@ -112,8 +102,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                         flex: 1,
                         child: Text(
                           "Seri Numarası:",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         )),
                     Expanded(
                       flex: 2,
@@ -129,8 +118,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                           }
                           return null;
                         },
-                        decoration: Dekorasyonlarim()
-                            .textFormFieldTrafoBilgiDecoration(),
+                        decoration: Dekorasyonlarim().textFormFieldTrafoBilgiDecoration(),
                       ),
                     ),
                   ],
@@ -145,8 +133,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                         flex: 1,
                         child: Text(
                           "Proje Numarası:",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         )),
                     Expanded(
                       flex: 2,
@@ -163,8 +150,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                           return null;
                         },
                         keyboardType: TextInputType.number,
-                        decoration: Dekorasyonlarim()
-                            .textFormFieldTrafoBilgiDecoration(),
+                        decoration: Dekorasyonlarim().textFormFieldTrafoBilgiDecoration(),
                       ),
                     ),
                   ],
@@ -179,8 +165,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                         flex: 1,
                         child: Text(
                           "Güç (kVA):",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         )),
                     Expanded(
                       flex: 2,
@@ -197,8 +182,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                           return null;
                         },
                         keyboardType: TextInputType.number,
-                        decoration: Dekorasyonlarim()
-                            .textFormFieldTrafoBilgiDecoration(),
+                        decoration: Dekorasyonlarim().textFormFieldTrafoBilgiDecoration(),
                       ),
                     ),
                   ],
@@ -212,8 +196,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                     const Expanded(
                         child: Text(
                       "Çevirme Oranı (kV):",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     )),
                     Expanded(
                       child: Row(
@@ -222,7 +205,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                             child: TextFormField(
                               onChanged: (value) {
                                 setState(() {
-                                  cevirmeOraniPrimer = value;
+                                  primerV = value;
                                 });
                               },
                               validator: (String? value) {
@@ -233,8 +216,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                               },
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.number,
-                              decoration: Dekorasyonlarim()
-                                  .textFormFieldTrafoBilgiDecoration(),
+                              decoration: Dekorasyonlarim().textFormFieldTrafoBilgiDecoration(),
                             ),
                           ),
                           const SizedBox(
@@ -248,7 +230,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                             child: TextFormField(
                               onChanged: (value) {
                                 setState(() {
-                                  cevirmeOraniSekonder = value;
+                                  sekonderV = value;
                                 });
                               },
                               validator: (String? value) {
@@ -259,8 +241,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                               },
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.number,
-                              decoration: Dekorasyonlarim()
-                                  .textFormFieldTrafoBilgiDecoration(),
+                              decoration: Dekorasyonlarim().textFormFieldTrafoBilgiDecoration(),
                             ),
                           ),
                         ],
@@ -278,8 +259,7 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                         flex: 1,
                         child: Text(
                           "Bağlantı Grubu:",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         )),
                     Expanded(
                       flex: 2,
@@ -349,20 +329,18 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                           Expanded(
                             flex: 2,
                             child: TextFormField(
-                              onChanged: (value){
+                              onChanged: (value) {
                                 setState(() {
                                   baglantiGrubuText = value;
                                 });
                               },
                               validator: (String? value) {
-                                if (value == null ||
-                                    value.isEmpty && baglantiGrubu == "Diger") {
+                                if (value == null || value.isEmpty && baglantiGrubu == "Diger") {
                                   return 'Bağlantı grubunu giriniz!';
                                 }
                                 return null;
                               },
-                              decoration: Dekorasyonlarim()
-                                  .textFormFieldTrafoBilgiBaglantiGrubu(),
+                              decoration: Dekorasyonlarim().textFormFieldTrafoBilgiBaglantiGrubu(),
                             ),
                           )
                         ],
@@ -375,23 +353,36 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Validate will return true if the form is valid, or false if
-                      // the form is invalid.
-                      if (_globalFormKey.currentState!.validate()) {
-                        // Process data.
-                      }
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(18.0),
-                      child: Text(
-                        'ONAYLA',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+                  child: bilgilerVeritanainaKaydediliyor == true
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: () => _kaydet(context),
+                          child: const Padding(
+                            padding: EdgeInsets.all(18.0),
+                            child: Text(
+                              'ONAYLA',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: bilgilerVeritanainaKaydediliyor == true
+                      ? const CircularProgressIndicator()
+                      :  ElevatedButton(
+                          onPressed: veriKaydiBasariliMi == true ? () => _testKategoriSayfasi(context) : null,
+                          child: const Padding(
+                            padding: EdgeInsets.all(18.0),
+                            child: Text(
+                              'TESTLERE BAŞLA',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
+                            ),
+                          ),
+                        ),
                 ),
               ],
             ),
@@ -400,6 +391,35 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
       ),
     );
   }
+
+  Future<void> _kaydet(BuildContext context) async {
+    if (_globalFormKey.currentState!.validate()) {
+      setState(() {
+        bilgilerVeritanainaKaydediliyor = true;
+      });
+      await Future.delayed(const Duration(seconds: 1), () {
+        // code to be executed after 2 seconds
+      });
+      await FirestoreDatabase()
+          .trafoBilgileriniKaydet(marka: marka, seriNo: seriNo, projeNo: projeNo, guc: guc, primerV: primerV, sekonderV: sekonderV, baglantiGrubu: baglantiGrubu);
+      setState(() {
+        bilgilerVeritanainaKaydediliyor = false;
+      });
+      if (context.mounted) Mesajlar().snackBarMesaji(context: context, mesaj: "Veriler Başarıyla Kaydedildi.", color: Colors.green);
+      veriKaydiBasariliMi = true;
+    } else {
+      if (context.mounted) Mesajlar().snackBarMesaji(context: context, mesaj: "Yeniden deneyiniz!", color: Colors.black54);
+      veriKaydiBasariliMi = false;
+    }
+  }
+}
+
+void _testKategoriSayfasi(BuildContext context){
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => const TT
+    ),
+  );
 }
 
 ///(1)
@@ -407,3 +427,6 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
 //değeri null değer alabileceği için (çünkü DropDownButton kullandık),onChenge:
 //özelliği içerisinde null gelme olasılığına karşı eğer null ise baglantiGrubu ??= "BağlantıGrubu";
 //yazarak değerin null olmasının önüne geçiyoruz.
+
+//TODO: veriler kaydedilirken aynı verinin daha önce var olup olmadığı kontrol edilmeli, aynı trafoya ait bir verigirişi varsa kullanıcıya uyarı ekranı gösterilerek verileri
+//güncelleyip güncellememek istediğnin onayı alınmalı.

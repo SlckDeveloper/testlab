@@ -11,6 +11,8 @@ class Auth {
         return "Kullanıcı bulunamadı!";
       } else if (e.code == 'wrong-password') {
         return "Şifre hatalı!";
+      }else{
+        return "Bağlantı sağlanamadı!";
       }
     }
   }

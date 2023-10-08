@@ -47,12 +47,12 @@ class Dekorasyonlarim {
     return Chip(
         label: Row(
           children: [
-            Icon(Icons.check,color: formOnayi == true ? Colors.green : Colors.blueGrey,size: 29,),
+            formOnayi == true ? const Icon(Icons.dangerous_outlined, color:   Colors.redAccent,size: 29,) : const Icon(Icons.check,color:  Colors.blueGrey,size: 29,),
             const SizedBox(width: 10,),
             Text(
               "Giriş",
               style: TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.bold, color: formOnayi == true ? Colors.green : Colors.white,),
+                  fontSize: 24, fontWeight: FontWeight.bold, color: formOnayi == true ? Colors.redAccent : Colors.white,),
             )
           ],
         ),
