@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:testlab/sayfalar/testler/ttr.dart';
+import 'package:testlab/sayfalar/testler/TTR/ttr.dart';
 import 'package:testlab/servisler/firestore_database.dart';
 import 'package:testlab/widgets/dekorasyonlarim.dart';
 import 'package:testlab/widgets/mesajlar.dart';
@@ -405,10 +405,10 @@ class _TrafoTanimlamaState extends State<TrafoTanimlama> {
       setState(() {
         bilgilerVeritanainaKaydediliyor = false;
       });
-      if (context.mounted) Mesajlar().snackBarMesaji(context: context, mesaj: "Veriler Başarıyla Kaydedildi.", color: Colors.green);
+      if (context.mounted) Mesajlar().snackBarMesaji(context: context, mesaj: "Veriler Başarıyla Kaydedildi.", arkaplanRengi: Colors.green);
       veriKaydiBasariliMi = true;
     } else {
-      if (context.mounted) Mesajlar().snackBarMesaji(context: context, mesaj: "Yeniden deneyiniz!", color: Colors.black54);
+      if (context.mounted) Mesajlar().snackBarMesaji(context: context, mesaj: "Yeniden deneyiniz!", arkaplanRengi: Colors.black54);
       veriKaydiBasariliMi = false;
     }
   }
